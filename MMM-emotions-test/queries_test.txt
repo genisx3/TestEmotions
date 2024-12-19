@@ -1,0 +1,15 @@
+// eslint-disable-next-line
+export const GET_PAT_EMOTIONS_DATA_ = gql`
+    query getpatientemotions($patid: Int!) {getpatientemotionsList(patid: $patid){
+        empatid
+        emmoodid
+        emdate
+    }}
+`;
+
+
+// eslint-disable-next-line
+export const GET_PAT_ID_DATA_ = gql`
+    query getpatientemotions($patid: Int!) {getpatid(umail:$umail)
+    }}
+`;

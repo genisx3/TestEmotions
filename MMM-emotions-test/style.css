@@ -1,0 +1,52 @@
+/* .imageHolderCal {
+  height:50px;
+  width:50px;
+  overflow:hidden;
+  border: none;
+  padding-right: 5px;
+}
+*/
+
+
+/* Datei: style.css */
+.emotion-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+  font-size: 18px;
+  text-align: left;
+}
+
+.emotion-table tr {
+  border-bottom: 1px solid #ddd;
+}
+
+.day-cell {
+  width: 20%;
+  padding: 10px;
+  font-weight: bold;
+  background-color: #f9f9f9;
+  text-align: center;
+}
+
+.emotion-cell {
+  width: 80%;
+  padding: 10px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: start;
+}
+
+.emotion-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #e8f4fc;
+  padding: 5px;
+  transition: transform 0.2s;
+}
+
+.emotion-icon:hover {
+  transform: scale(1.2);
+}
