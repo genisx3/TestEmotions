@@ -13,3 +13,21 @@ export const GET_PAT_ID_DATA_ = gql`
     query getpatientemotions($patid: Int!) {getpatid(umail:$umail)
     }}
 `;
+
+
+
+// config file spiegel
+
+
+{
+			module: "MMM-LetheEmotions",
+			header: "Lethe Emotions",
+			position: "bottom_left",
+			config: {
+				umail: "mirror.dummy@fhjoanneum.at",
+				lc: "en",
+				timeout: "10000",
+				//url: "http://athen.technikum.fh-joanneum.local:5000/graphql"
+				url: "http://192.168.178.23:5000/graphql"
+			},
+		},
