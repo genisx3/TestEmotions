@@ -66,40 +66,36 @@ getBarChart() {
     // Create a bar chart for emotions
     const emotionLabels = Object.keys(this.emotionCounts);
     const emotionValues = Object.values(this.emotionCounts);
-
+ 
     const chartWidth = 800; // Fixed width for the chart
-    const chartHeight = 300; // Base height for the bars
+    const chartHeight = 300; // Maximum height for the bars
     const barWidth = 60;    // Width of each bar
     const barSpacing = 20;  // Space between bars
     const totalBars = emotionLabels.length;
     const totalChartWidth = totalBars * (barWidth + barSpacing) - barSpacing;
     const offsetX = (chartWidth - totalChartWidth) / 2; // Centering offset
-
+ 
     // Get the maximum value to scale bars dynamically
     const maxValue = Math.max(...emotionValues);
-    const scaleFactor = maxValue > 0 ? chartHeight / maxValue : 1; // Avoid division by zero
-    const adjustedHeight = chartHeight + 50; // Add extra space above the tallest bar for labels
-
+    const adjustedMaxValue = maxValue > 0 ? maxValue * 1.2 : 1; // Add 20% buffer above max value
+    const scaleFactor = chartHeight / adjustedMaxValue; // Use adjusted max value for scaling
+ 
     return `
-        <svg width="${chartWidth}" height="${adjustedHeight}">
+<svg width="${chartWidth}" height="${chartHeight + 50}">
             ${emotionLabels.map((emotion, index) => {
                 const barHeight = emotionValues[index] * scaleFactor; // Dynamically scaled bar height
                 const label = this.emotionLabelsMap[emotion];  // Get full label
                 const xPosition = offsetX + index * (barWidth + barSpacing);
-
-                // Calculate Y position for the value above the bar
-                const textYPosition = chartHeight - barHeight - 10;
-
                 return `
-                    <rect x="${xPosition}" y="${chartHeight - barHeight}" width="${barWidth}" height="${barHeight}" fill="steelblue" />
-                    <text x="${xPosition + barWidth / 2}" y="${textYPosition}" text-anchor="middle" fill="white">${emotionValues[index]}</text>
-                    <text x="${xPosition + barWidth / 2}" y="${chartHeight + 20}" text-anchor="middle" fill="white">${label}</text>
+<rect x="${xPosition}" y="${chartHeight - barHeight}" width="${barWidth}" height="${barHeight}" fill="steelblue" />
+<text x="${xPosition + barWidth / 2}" y="${chartHeight - barHeight - 10}" text-anchor="middle" fill="white">${emotionValues[index]}</text>
+<text x="${xPosition + barWidth / 2}" y="${chartHeight + 20}" text-anchor="middle" fill="white">${label}</text>
                 `;
             }).join('')}
-            <!-- Axis lines -->
-            <line x1="10" y1="0" x2="10" y2="${chartHeight}" stroke="white" stroke-width="2" />
-            <line x1="10" y1="${chartHeight}" x2="${chartWidth - 10}" y2="${chartHeight}" stroke="white" stroke-width="2" />
-        </svg>
+<!-- Axis lines -->
+<line x1="10" y1="0" x2="10" y2="${chartHeight}" stroke="white" stroke-width="2" />
+<line x1="10" y1="${chartHeight}" x2="${chartWidth - 10}" y2="${chartHeight}" stroke="white" stroke-width="2" />
+</svg>
     `;
 },
     async retrieveEmotionData() {
