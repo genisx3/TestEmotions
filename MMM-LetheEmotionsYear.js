@@ -45,23 +45,23 @@ Module.register("MMM-LetheEmotionsYear", {
         }
     },
     getDom() {
-        const wrapper = document.createElement("div");
-        
-        if (this.isLoading) {
-            wrapper.innerHTML = "Loading...";
-            return wrapper;
-        } else {
-            wrapper.className = "bright";
-            // Create a bar chart for emotion counts in the year
-            wrapper.innerHTML = `
-                <strong>Yearly Emotion Counts:</strong>
-                <div class="chart-container">
-                    ${this.getBarChart()}
-                </div>
-            `;
-            return wrapper;
-        }
-    },
+    const wrapper = document.createElement("div");
+    
+    if (this.isLoading) {
+        wrapper.innerHTML = "Loading...";
+        return wrapper;
+    } else {
+        wrapper.className = "bright";
+        // Create a bar chart for emotion counts in the year
+        wrapper.innerHTML = `
+            <strong>Yearly Emotion Counts:</strong>
+            <div style="padding-top: 10px;" class="chart-container">
+                ${this.getBarChart()}
+            </div>
+        `;
+        return wrapper;
+    }
+},
 getBarChart() {
     // Create a bar chart for emotions
     const emotionLabels = Object.keys(this.emotionCounts);
