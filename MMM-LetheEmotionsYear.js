@@ -79,28 +79,23 @@ getBarChart() {
     const maxValue = Math.max(...emotionValues);
     const scaleFactor = maxValue > 0 ? chartHeight / maxValue : 1; // Avoid division by zero
 
-    return `
+    return 
         <svg width="${chartWidth}" height="${chartHeight + 50}">
             ${emotionLabels.map((emotion, index) => {
                 const barHeight = emotionValues[index] * scaleFactor; // Dynamically scaled bar height
                 const label = this.emotionLabelsMap[emotion];  // Get full label
                 const xPosition = offsetX + index * (barWidth + barSpacing);
-                const textYPosition = chartHeight - barHeight - 10; // Default position above the bar
-                
-                // Ensure the text doesn't overlap with the bar
-                const safeTextYPosition = textYPosition < 10 ? 10 : textYPosition;
-
-                return `
+                return 
                     <rect x="${xPosition}" y="${chartHeight - barHeight}" width="${barWidth}" height="${barHeight}" fill="steelblue" />
-                    <text x="${xPosition + barWidth / 2}" y="${safeTextYPosition}" text-anchor="middle" fill="white">${emotionValues[index]}</text>
+                    <text x="${xPosition + barWidth / 2}" y="${chartHeight - barHeight - 10}" text-anchor="middle" fill="white">${emotionValues[index]}</text>
                     <text x="${xPosition + barWidth / 2}" y="${chartHeight + 20}" text-anchor="middle" fill="white">${label}</text>
-                `;
+                ;
             }).join('')}
             <!-- Axis lines -->
             <line x1="10" y1="0" x2="10" y2="${chartHeight}" stroke="white" stroke-width="2" />
             <line x1="10" y1="${chartHeight}" x2="${chartWidth - 10}" y2="${chartHeight}" stroke="white" stroke-width="2" />
         </svg>
-    `;
+    ;
 },
     async retrieveEmotionData() {
         const patid = this.config.patid;
