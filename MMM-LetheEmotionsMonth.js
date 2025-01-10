@@ -34,35 +34,38 @@ Module.register("MMM-LetheEmotionsMonth", {
         }
     },
     getDom() {
-        const wrapper = document.createElement("div");
-        if (this.isLoading) {
-            wrapper.innerHTML = "Loading...";
-            return wrapper;
-        } else {
-            wrapper.className = "bright";
-            // Create a table to display emotion counts for the month
-            wrapper.innerHTML = `
-                <strong>Monthly Emotion Counts:</strong>
-                <table>
-                    <thead>
+    const wrapper = document.createElement("div");
+    if (this.isLoading) {
+        wrapper.innerHTML = "Loading...";
+        return wrapper;
+    } else {
+        wrapper.className = "bright";
+        // Create a table to display emotion counts for the month with SVG images
+        wrapper.innerHTML = `
+            <strong>Monthly Emotion Counts:</strong>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Emotion</th>
+                        <th>Count</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${Object.keys(this.emotionCounts).map(emotion => `
                         <tr>
-                            <th>Emotion</th>
-                            <th>Count</th>
+                            <td>
+                                <img src="modules/MMM-LetheEmotionsMonth/svg/${emotion}.svg" alt="${emotion}" style="width: 24px; height: 24px; vertical-align: middle; margin-right: 8px;">
+                                ${emotion}
+                            </td>
+                            <td>${this.emotionCounts[emotion]}</td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        ${Object.keys(this.emotionCounts).map(emotion => `
-                            <tr>
-                                <td>${emotion}</td>
-                                <td>${this.emotionCounts[emotion]}</td>
-                            </tr>
-                        `).join('')}
-                    </tbody>
-                </table>
-            `;
-            return wrapper;
-        }
-    },
+                    `).join('')}
+                </tbody>
+            </table>
+        `;
+        return wrapper;
+    }
+},
     async retrieveEmotionData() {
         const patid = this.config.patid;
         const query = `
