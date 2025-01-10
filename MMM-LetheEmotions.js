@@ -23,41 +23,41 @@ Module.register("MMM-LetheEmotions", {
             }, this.config.fetchInterval);
         }
     },
-    getDom() {
-        const wrapper = document.createElement("div");
-        if (this.letheEmotions.length === 0) {
-            wrapper.innerHTML = "Loading...";
-            return wrapper;
-        } else {
-            wrapper.className = "bright";
-            // Create a table to display emotions in a weekly calendar
-            wrapper.innerHTML = `
-                <strong>Weekly Emotions for Patient ${this.config.patid}:</strong>
-                <table>
-                    <thead>
-                        <tr>
-                            ${this.getWeekDays().map(day => `<th>${day}</th>`).join('')}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            ${this.letheEmotions.map(e => `
-                                <td>
-                                    <div>${e.date}</div>
-                                    ${
-                                        e.emotion === "no-data"
-                                            ? `<div style="font-style: italic; color: gray;">no entry</div>`
-                                            : `<img src="${this.file(`svg/${e.emotion}.svg`)}" alt="${e.emotion}" style="width:50px;height:50px;">`
-                                    }
-                                </td>
-                            `).join('')}
-                        </tr>
-                    </tbody>
-                </table>
-            `;
-            return wrapper;
-        }
-    },
+   getDom() {
+    const wrapper = document.createElement("div");
+    if (this.letheEmotions.length === 0) {
+        wrapper.innerHTML = "Loading...";
+        return wrapper;
+    } else {
+        wrapper.className = "bright";
+        // Create a table to display emotions in a weekly calendar
+        wrapper.innerHTML = `
+            <strong>Weekly Emotions for Patient ${this.config.patid}:</strong>
+            <table>
+                <thead>
+                    <tr>
+                        ${this.getWeekDays().map(day => `<th>${day}</th>`).join('')}
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        ${this.letheEmotions.map(e => `
+                            <td class="table-cell">
+                                <div>${e.date}</div>
+                                ${
+                                    e.emotion === "no-data"
+                                        ? `<div class="no-entry">no entry</div>`
+                                        : `<img src="${this.file(`svg/${e.emotion}.svg`)}" alt="${e.emotion}" style="width:50px;height:50px;">`
+                                }
+                            </td>
+                        `).join('')}
+                    </tr>
+                </tbody>
+            </table>
+        `;
+        return wrapper;
+    }
+},
     async retrieveEmotionData() {
         const patid = this.config.patid;
         const query = `
