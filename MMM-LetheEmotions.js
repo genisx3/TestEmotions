@@ -95,9 +95,13 @@ Module.register("MMM-LetheEmotions", {
 
             if (result.data && result.data.getpatientemotionsList) {
                 const emotions = result.data.getpatientemotionsList;
+
                 // Map emotions to include date and emotion name
                 this.letheEmotions = this.getWeekDates().map(date => {
-                    const emotion = emotions.find(e => e.emdate === date);
+                    const emotion = emotions.find(e => {
+                        const emotionDate = new Date(e.emdate).toISOString().split('T')[0]; // Convert emdate to YYYY-MM-DD
+                        return emotionDate === date;
+                    });
                     return {
                         date: date,
                         emotion: emotion ? emotionMap[emotion.emmoodid] || "unknown" : "no-data"
