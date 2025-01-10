@@ -99,7 +99,11 @@ Module.register("MMM-LetheEmotions", {
                 // Map emotions to include date and emotion name
                 this.letheEmotions = this.getWeekDates().map(date => {
                     const emotion = emotions.find(e => {
-                        const emotionDate = new Date(e.emdate).toISOString().split('T')[0]; // Convert emdate to YYYY-MM-DD
+                        const emotionDate = new Date(e.emdate).toLocaleDateString('de-AT', {
+                            year: 'numeric',
+                            month: '2-digit',
+                            day: '2-digit'
+                        }).split('.').reverse().join('-'); // Convert emdate to YYYY-MM-DD
                         return emotionDate === date;
                     });
                     return {
