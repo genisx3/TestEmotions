@@ -59,6 +59,7 @@ Module.register("MMM-LetheEmotions", {
         const query = `
             query getpatientemotions($patid: Int!) {
                 getpatientemotionsList(patid: $patid) {
+                    empatid
                     emdate
                     emmoodid
                 }
