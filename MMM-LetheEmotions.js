@@ -44,7 +44,11 @@ Module.register("MMM-LetheEmotions", {
                             ${this.letheEmotions.map(e => `
                                 <td>
                                     <div>${e.date}</div>
-                                    <img src="${this.file(`svg/${e.emotion}.svg`)}" alt="${e.emotion}" style="width:50px;height:50px;">
+                                    ${
+                                        e.emotion === "no-data"
+                                            ? `<div style="font-style: italic; color: gray;">no entry</div>`
+                                            : `<img src="${this.file(`svg/${e.emotion}.svg`)}" alt="${e.emotion}" style="width:50px;height:50px;">`
+                                    }
                                 </td>
                             `).join('')}
                         </tr>
