@@ -42,43 +42,43 @@ Module.register("MMM-LetheEmotions", {
         }
     },
     getDom() {
-        const wrapper = document.createElement("div");
-        const totalWeeksInYear = this.getTotalWeeksInYear(new Date());
+    const wrapper = document.createElement("div");
+    const totalWeeksInYear = this.getTotalWeeksInYear(new Date());
 
-        if (this.letheEmotions.length === 0) {
-            wrapper.innerHTML = "Loading...";
-            return wrapper;
-        } else {
-            wrapper.className = "bright";
-            // Display the week info and a table of emotions
-            wrapper.innerHTML = `
-                <div><strong>Kalenderwoche: KW ${this.currentWeekNumber}/${totalWeeksInYear}</strong></div>
-                <strong>Weekly Emotions:</strong>
-                <table>
-                    <thead>
-                        <tr>
-                            ${this.getWeekDays().map(day => `<th>${day}</th>`).join('')}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            ${this.letheEmotions.map(e => ` 
-                                <td class="table-cell">
-                                    <div>${e.date}</div>
-                                    ${
-                                        e.emotion === "no-data"
-                                            ? `<div class="no-entry">no entry</div>`
-                                            : `<img src="${this.file(`svg/${e.emotion}.svg`)}" alt="${e.emotion}" style="width:50px;height:50px;">`
-                                    }
-                                </td>
-                            `).join('')}
-                        </tr>
-                    </tbody>
-                </table>
-            `;
-            return wrapper;
-        }
-    },
+    if (this.letheEmotions.length === 0) {
+        wrapper.innerHTML = "Loading...";
+        return wrapper;
+    } else {
+        wrapper.className = "bright";
+        // Display the week info and a table of emotions
+        wrapper.innerHTML = `
+            <div><strong>Kalenderwoche: ${this.currentWeekNumber}/${totalWeeksInYear}</strong></div>
+            <strong>Weekly Emotions:</strong>
+            <table>
+                <thead>
+                    <tr>
+                        ${this.getWeekDays().map(day => `<th class="week-day">${day}</th>`).join('')}
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="emotion-row">
+                        ${this.letheEmotions.map(e => ` 
+                            <td class="table-cell">
+                                <div>${e.date}</div>
+                                ${
+                                    e.emotion === "no-data"
+                                        ? `<div class="no-entry">no entry</div>`
+                                        : `<img src="${this.file(`svg/${e.emotion}.svg`)}" alt="${e.emotion}" style="width:50px;height:50px;">`
+                                }
+                            </td>
+                        `).join('')}
+                    </tr>
+                </tbody>
+            </table>
+        `;
+        return wrapper;
+    }
+},
     async retrieveEmotionData() {
         const patid = this.config.patid;
         const query = `
