@@ -62,29 +62,36 @@ Module.register("MMM-LetheEmotionsYear", {
             return wrapper;
         }
     },
-    getBarChart() {
-        // Create a bar chart for emotions
-        const emotionLabels = Object.keys(this.emotionCounts);
-        const emotionValues = Object.values(this.emotionCounts);
+   getBarChart() {
+    // Create a bar chart for emotions
+    const emotionLabels = Object.keys(this.emotionCounts);
+    const emotionValues = Object.values(this.emotionCounts);
 
-        return `
-            <svg width="100%" height="350">
-                ${emotionLabels.map((emotion, index) => {
-                    const barHeight = emotionValues[index] * 20; // Scale the bar height
-                    const label = this.emotionLabelsMap[emotion];  // Get full label
-                    return `
-                        <rect x="${index * 80 + 20}" y="${300 - barHeight}" width="60" height="${barHeight}" fill="steelblue" />
-                        <text x="${index * 80 + 50}" y="${300 - barHeight - 10}" text-anchor="middle" fill="white">${emotionValues[index]}</text>
-                        <!-- Adjust the y position to place labels below the X-axis -->
-                        <text x="${index * 80 + 50}" y="330" text-anchor="middle" fill="white">${label}</text>
-                    `;
-                }).join('')}
-                <!-- Axis lines -->
-                <line x1="10" y1="0" x2="10" y2="300" stroke="white" stroke-width="2" />
-                <line x1="10" y1="300" x2="100%" y2="300" stroke="white" stroke-width="2" />
-            </svg>
-        `;
-    },
+    const chartWidth = 800; // Fixed width for the chart
+    const barWidth = 60;    // Width of each bar
+    const barSpacing = 20;  // Space between bars
+    const totalBars = emotionLabels.length;
+    const totalChartWidth = totalBars * (barWidth + barSpacing) - barSpacing;
+    const offsetX = (chartWidth - totalChartWidth) / 2; // Centering offset
+
+    return `
+        <svg width="${chartWidth}" height="350">
+            ${emotionLabels.map((emotion, index) => {
+                const barHeight = emotionValues[index] * 20; // Scale the bar height
+                const label = this.emotionLabelsMap[emotion];  // Get full label
+                const xPosition = offsetX + index * (barWidth + barSpacing);
+                return `
+                    <rect x="${xPosition}" y="${300 - barHeight}" width="${barWidth}" height="${barHeight}" fill="steelblue" />
+                    <text x="${xPosition + barWidth / 2}" y="${300 - barHeight - 10}" text-anchor="middle" fill="white">${emotionValues[index]}</text>
+                    <text x="${xPosition + barWidth / 2}" y="330" text-anchor="middle" fill="white">${label}</text>
+                `;
+            }).join('')}
+            <!-- Axis lines -->
+            <line x1="10" y1="0" x2="10" y2="300" stroke="white" stroke-width="2" />
+            <line x1="10" y1="300" x2="${chartWidth - 10}" y2="300" stroke="white" stroke-width="2" />
+        </svg>
+    `;
+},
     async retrieveEmotionData() {
         const patid = this.config.patid;
         const query = `
