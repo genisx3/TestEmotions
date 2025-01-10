@@ -59,7 +59,6 @@ Module.register("MMM-LetheEmotions", {
         const query = `
             query getpatientemotions($patid: Int!) {
                 getpatientemotionsList(patid: $patid) {
-                    empatid
                     emdate
                     emmoodid
                 }
@@ -100,20 +99,20 @@ Module.register("MMM-LetheEmotions", {
                 this.letheEmotions = this.getWeekDates().map(date => {
                     const emotion = emotions.find(e => e.emdate === date);
                     return {
-                        date: this.formatDate(date),
+                        date: date,
                         emotion: emotion ? emotionMap[emotion.emmoodid] || "unknown" : "no-data"
                     };
                 });
             } else {
                 this.letheEmotions = this.getWeekDates().map(date => ({
-                    date: this.formatDate(date),
+                    date: date,
                     emotion: "no-data"
                 }));
             }
         } catch (error) {
             console.error("Error fetching emotion data:", error);
             this.letheEmotions = this.getWeekDates().map(date => ({
-                date: this.formatDate(date),
+                date: date,
                 emotion: "error"
             }));
         }
@@ -129,10 +128,6 @@ Module.register("MMM-LetheEmotions", {
         });
         clearTimeout(id);
         return response;
-    },
-    formatDate(dateString) {
-        const [year, month, day] = dateString.split('-');
-        return `${day}-${month}-${year}`;
     },
     getWeekDates() {
         const today = new Date();
