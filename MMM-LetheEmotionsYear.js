@@ -1,4 +1,4 @@
-Module.register("MMM-LetheEmotionsYear", {
+Module.register("MMM-LetheEmotionsYear", { 
     defaults: {
         fetchInterval: 5 * 60 * 1000,
         datelocales: 'de-AT',
@@ -62,10 +62,13 @@ Module.register("MMM-LetheEmotionsYear", {
                     const barHeight = emotionValues[index] * 20; // Scale the bar height
                     return `
                         <rect x="${index * 80 + 20}" y="${300 - barHeight}" width="60" height="${barHeight}" fill="steelblue" />
-                        <text x="${index * 80 + 50}" y="${300 - barHeight - 10}" text-anchor="middle" fill="black">${emotionValues[index]}</text>
-                        <text x="${index * 80 + 50}" y="310" text-anchor="middle" fill="black">${emotion}</text>
+                        <text x="${index * 80 + 50}" y="${300 - barHeight - 10}" text-anchor="middle" fill="white">${emotionValues[index]}</text>
+                        <text x="${index * 80 + 50}" y="310" text-anchor="middle" fill="white">${emotion}</text>
                     `;
                 }).join('')}
+                <!-- Axis lines -->
+                <line x1="10" y1="0" x2="10" y2="300" stroke="white" stroke-width="2" />
+                <line x1="10" y1="300" x2="100%" y2="300" stroke="white" stroke-width="2" />
             </svg>
         `;
     },
@@ -184,3 +187,4 @@ Module.register("MMM-LetheEmotionsYear", {
         return response;
     }
 });
+
