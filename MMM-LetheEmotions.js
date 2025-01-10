@@ -1,4 +1,4 @@
-Module.register("MMM-LetheEmotions", {   
+Module.register("MMM-LetheEmotions", {    
     defaults: {
         fetchInterval: 5 * 60 * 1000,
         datelocales: 'de-AT',
@@ -42,43 +42,43 @@ Module.register("MMM-LetheEmotions", {
         }
     },
     getDom() {
-    const wrapper = document.createElement("div");
-    const totalWeeksInYear = this.getTotalWeeksInYear(new Date());
+        const wrapper = document.createElement("div");
+        const totalWeeksInYear = this.getTotalWeeksInYear(new Date());
 
-    if (this.letheEmotions.length === 0) {
-        wrapper.innerHTML = "Loading...";
-        return wrapper;
-    } else {
-        wrapper.className = "bright";
-        // Display the week info and a table of emotions
-        wrapper.innerHTML = `
-            <div><strong>Kalenderwoche: ${this.currentWeekNumber}/${totalWeeksInYear}</strong></div>
-            <strong>Weekly Emotions:</strong>
-            <table>
-                <thead>
-                    <tr>
-                        ${this.getWeekDays().map(day => `<th class="week-day">${day}</th>`).join('')}
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr class="emotion-row">
-                        ${this.letheEmotions.map(e => ` 
-                            <td class="table-cell">
-                                <div>${e.date}</div>
-                                ${
-                                    e.emotion === "no-data"
-                                        ? `<div class="no-entry">no entry</div>`
-                                        : `<img src="${this.file(`svg/${e.emotion}.svg`)}" alt="${e.emotion}" style="width:50px;height:50px;">`
-                                }
-                            </td>
-                        `).join('')}
-                    </tr>
-                </tbody>
-            </table>
-        `;
-        return wrapper;
-    }
-},
+        if (this.letheEmotions.length === 0) {
+            wrapper.innerHTML = "Loading...";
+            return wrapper;
+        } else {
+            wrapper.className = "bright";
+            // Display the week info and a table of emotions
+            wrapper.innerHTML = `
+                <div><strong>Kalenderwoche: ${this.currentWeekNumber}/${totalWeeksInYear}</strong></div>
+                <strong>Weekly Emotions:</strong>
+                <table>
+                    <thead>
+                        <tr>
+                            ${this.getWeekDays().map(day => `<th class="week-day">${day}</th>`).join('')}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="emotion-row">
+                            ${this.letheEmotions.map(e => ` 
+                                <td class="table-cell">
+                                    <div>${e.date}</div>
+                                    ${
+                                        e.emotion === "no-data"
+                                            ? `<div class="no-entry">no entry</div>`
+                                            : `<img src="${this.file(`svg/${e.emotion}.svg`)}" alt="${e.emotion}" style="width:50px;height:50px;">`
+                                    }
+                                </td>
+                            `).join('')}
+                        </tr>
+                    </tbody>
+                </table>
+            `;
+            return wrapper;
+        }
+    },
     async retrieveEmotionData() {
         const patid = this.config.patid;
         const query = `
@@ -126,28 +126,28 @@ Module.register("MMM-LetheEmotions", {
                 // Map emotions to include date and emotion name
                 this.letheEmotions = weekDates.map(date => {
                     const emotion = emotions.find(e => {
-                        const emotionDate = new Date(e.emdate).toLocaleDateString('de-AT', {
-                            year: 'numeric',
-                            month: '2-digit',
-                            day: '2-digit'
-                        }).split('.').reverse().join('-'); // Convert emdate to YYYY-MM-DD
+                        const emotionDate = new Date(e.emdate).toISOString().split('T')[0]; // YYYY-MM-DD Format von der DB
                         return emotionDate === date;
                     });
+
+                    // Format das Datum nach der DB-Abfrage in "DD.MM.YYYY"
+                    const formattedDate = this.formatDateToDDMMYYYY(date);
+
                     return {
-                        date: date,
+                        date: formattedDate,  // Das formatierte Datum
                         emotion: emotion ? emotionMap[emotion.emmoodid] || "unknown" : "no-data"
                     };
                 });
             } else {
                 this.letheEmotions = this.getWeekDates(this.currentWeekOffset).map(date => ({
-                    date: date,
+                    date: this.formatDateToDDMMYYYY(date), // Formatierung nach der DB-Abfrage
                     emotion: "no-data"
                 }));
             }
         } catch (error) {
             console.error("Error fetching emotion data:", error);
             this.letheEmotions = this.getWeekDates(this.currentWeekOffset).map(date => ({
-                date: date,
+                date: this.formatDateToDDMMYYYY(date), // Formatierung nach der DB-Abfrage
                 emotion: "error"
             }));
         }
@@ -190,6 +190,14 @@ Module.register("MMM-LetheEmotions", {
     },
     getWeekDays() {
         return ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+    },
+    formatDateToDDMMYYYY(date) {
+        const d = new Date(date);
+        const day = String(d.getDate()).padStart(2, '0');
+        const month = String(d.getMonth() + 1).padStart(2, '0'); // Monate sind 0-indexiert
+        const year = d.getFullYear();
+
+        return `${day}.${month}.${year}`;
     }
 });
 
