@@ -1,4 +1,4 @@
-Module.register("MMM-LetheEmotionsYear", {  
+Module.register("MMM-LetheEmotionsYear", {   
     defaults: {
         fetchInterval: 5 * 60 * 1000,
         datelocales: 'de-AT',
@@ -68,14 +68,15 @@ Module.register("MMM-LetheEmotionsYear", {
         const emotionValues = Object.values(this.emotionCounts);
 
         return `
-            <svg width="100%" height="300">
+            <svg width="100%" height="350">
                 ${emotionLabels.map((emotion, index) => {
                     const barHeight = emotionValues[index] * 20; // Scale the bar height
                     const label = this.emotionLabelsMap[emotion];  // Get full label
                     return `
                         <rect x="${index * 80 + 20}" y="${300 - barHeight}" width="60" height="${barHeight}" fill="steelblue" />
                         <text x="${index * 80 + 50}" y="${300 - barHeight - 10}" text-anchor="middle" fill="white">${emotionValues[index]}</text>
-                        <text x="${index * 80 + 50}" y="310" text-anchor="middle" fill="white">${label}</text>
+                        <!-- Adjust the y position to place labels below the X-axis -->
+                        <text x="${index * 80 + 50}" y="330" text-anchor="middle" fill="white">${label}</text>
                     `;
                 }).join('')}
                 <!-- Axis lines -->
@@ -199,5 +200,4 @@ Module.register("MMM-LetheEmotionsYear", {
         return response;
     }
 });
-
 
