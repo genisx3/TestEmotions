@@ -54,27 +54,38 @@ Module.register("MMM-LetheEmotions", {
             wrapper.innerHTML = `
                 <div><strong>Kalenderwoche: ${this.currentWeekNumber}/${totalWeeksInYear}</strong></div>
                 <strong>Weekly Emotions:</strong>
-                <table>
-                    <thead>
-                        <tr>
-                            ${this.getWeekDays().map(day => `<th class="week-day">${day}</th>`).join('')}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr class="emotion-row">
-                            ${this.letheEmotions.map(e => ` 
-                                <td class="table-cell">
-                                    <div>${e.date}</div>
-                                    ${
-                                        e.emotion === "no-data"
-                                            ? `<div class="no-entry">no entry</div>`
-                                            : `<img src="${this.file(`svg/${e.emotion}.svg`)}" alt="${e.emotion}" style="width:50px;height:50px;">`
-                                    }
-                                </td>
-                            `).join('')}
-                        </tr>
-                    </tbody>
-                </table>
+               <table style="border-collapse: collapse;">
+  <thead>
+    <tr>
+      ${this.getWeekDays()
+        .map(
+          (day) =>
+            `<th class="week-day" style="padding: 5px; font-size: 14px; line-height: 1.2;">${day}</th>`
+        )
+        .join("")}
+    </tr>
+  </thead>
+  <tbody>
+    <tr class="emotion-row">
+      ${this.letheEmotions
+        .map(
+          (e) => `
+            <td class="table-cell" style="padding: 5px; text-align: center; vertical-align: middle;">
+              <div>${e.date}</div>
+              ${
+                e.emotion === "no-data"
+                  ? `<div class="no-entry" style="font-style: italic; color: gray;">no entry</div>`
+                  : `<img src="${this.file(
+                      `svg/${e.emotion}.svg`
+                    )}" alt="${e.emotion}" style="width:50px; height:50px;">`
+              }
+            </td>
+          `
+        )
+        .join("")}
+    </tr>
+  </tbody>
+</table>
             `;
             return wrapper;
         }
