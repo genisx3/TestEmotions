@@ -31,6 +31,9 @@ Module.register("MMM-LetheEmotions", {
         } else if (notification === "DOWN") {
             this.currentWeekOffset -= 1;
             this.retrieveEmotionData();
+        } else if (notification === "CLOCKWISE") {  // Reset to current week
+            this.currentWeekOffset = 0;
+            this.retrieveEmotionData();
         }
     },
     getDom() {
@@ -51,7 +54,7 @@ Module.register("MMM-LetheEmotions", {
                     </thead>
                     <tbody>
                         <tr>
-                            ${this.letheEmotions.map(e => `
+                            ${this.letheEmotions.map(e => ` 
                                 <td class="table-cell">
                                     <div>${e.date}</div>
                                     ${
