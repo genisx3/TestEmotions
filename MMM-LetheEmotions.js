@@ -1,4 +1,4 @@
-Module.register("MMM-LetheEmotions", {
+Module.register("MMM-LetheEmotions", { 
     defaults: {
         fetchInterval: 5 * 60 * 1000,
         datelocales: 'de-AT',
@@ -15,6 +15,7 @@ Module.register("MMM-LetheEmotions", {
         return [];
     },
     letheEmotions: [], // Updated to store multiple emotions with date
+    currentWeekOffset: 0, // Track the current week offset
     notificationReceived(notification, payload, sender) {
         if (notification === 'MODULE_DOM_CREATED') {
             this.retrieveEmotionData();
@@ -22,42 +23,51 @@ Module.register("MMM-LetheEmotions", {
                 this.retrieveEmotionData();
             }, this.config.fetchInterval);
         }
+
+        // Handle gestures from MMM-GroveGesture
+        if (notification === "UP") {
+            this.currentWeekOffset += 1;
+            this.retrieveEmotionData();
+        } else if (notification === "DOWN") {
+            this.currentWeekOffset -= 1;
+            this.retrieveEmotionData();
+        }
     },
-   getDom() {
-    const wrapper = document.createElement("div");
-    if (this.letheEmotions.length === 0) {
-        wrapper.innerHTML = "Loading...";
-        return wrapper;
-    } else {
-        wrapper.className = "bright";
-        // Create a table to display emotions in a weekly calendar
-        wrapper.innerHTML = `
-            <strong>Weekly Emotions for Patient ${this.config.patid}:</strong>
-            <table>
-                <thead>
-                    <tr>
-                        ${this.getWeekDays().map(day => `<th>${day}</th>`).join('')}
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        ${this.letheEmotions.map(e => `
-                            <td class="table-cell">
-                                <div>${e.date}</div>
-                                ${
-                                    e.emotion === "no-data"
-                                        ? `<div class="no-entry">no entry</div>`
-                                        : `<img src="${this.file(`svg/${e.emotion}.svg`)}" alt="${e.emotion}" style="width:50px;height:50px;">`
-                                }
-                            </td>
-                        `).join('')}
-                    </tr>
-                </tbody>
-            </table>
-        `;
-        return wrapper;
-    }
-},
+    getDom() {
+        const wrapper = document.createElement("div");
+        if (this.letheEmotions.length === 0) {
+            wrapper.innerHTML = "Loading...";
+            return wrapper;
+        } else {
+            wrapper.className = "bright";
+            // Create a table to display emotions in a weekly calendar
+            wrapper.innerHTML = `
+                <strong>Weekly Emotions for Patient ${this.config.patid}:</strong>
+                <table>
+                    <thead>
+                        <tr>
+                            ${this.getWeekDays().map(day => `<th>${day}</th>`).join('')}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            ${this.letheEmotions.map(e => `
+                                <td class="table-cell">
+                                    <div>${e.date}</div>
+                                    ${
+                                        e.emotion === "no-data"
+                                            ? `<div class="no-entry">no entry</div>`
+                                            : `<img src="${this.file(`svg/${e.emotion}.svg`)}" alt="${e.emotion}" style="width:50px;height:50px;">`
+                                    }
+                                </td>
+                            `).join('')}
+                        </tr>
+                    </tbody>
+                </table>
+            `;
+            return wrapper;
+        }
+    },
     async retrieveEmotionData() {
         const patid = this.config.patid;
         const query = `
@@ -100,9 +110,10 @@ Module.register("MMM-LetheEmotions", {
 
             if (result.data && result.data.getpatientemotionsList) {
                 const emotions = result.data.getpatientemotionsList;
+                const weekDates = this.getWeekDates(this.currentWeekOffset);
 
                 // Map emotions to include date and emotion name
-                this.letheEmotions = this.getWeekDates().map(date => {
+                this.letheEmotions = weekDates.map(date => {
                     const emotion = emotions.find(e => {
                         const emotionDate = new Date(e.emdate).toLocaleDateString('de-AT', {
                             year: 'numeric',
@@ -117,14 +128,14 @@ Module.register("MMM-LetheEmotions", {
                     };
                 });
             } else {
-                this.letheEmotions = this.getWeekDates().map(date => ({
+                this.letheEmotions = this.getWeekDates(this.currentWeekOffset).map(date => ({
                     date: date,
                     emotion: "no-data"
                 }));
             }
         } catch (error) {
             console.error("Error fetching emotion data:", error);
-            this.letheEmotions = this.getWeekDates().map(date => ({
+            this.letheEmotions = this.getWeekDates(this.currentWeekOffset).map(date => ({
                 date: date,
                 emotion: "error"
             }));
@@ -142,8 +153,9 @@ Module.register("MMM-LetheEmotions", {
         clearTimeout(id);
         return response;
     },
-    getWeekDates() {
+    getWeekDates(offset) {
         const today = new Date();
+        today.setDate(today.getDate() + (offset * 7)); // Adjust the date by the week offset
         const firstDayOfWeek = new Date(today.setDate(today.getDate() - today.getDay() + 1)); // Monday
         return Array.from({ length: 7 }).map((_, i) => {
             const day = new Date(firstDayOfWeek);
