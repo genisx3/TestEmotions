@@ -1,4 +1,4 @@
-Module.register("MMM-LetheEmotions", { 
+Module.register("MMM-LetheEmotions", {  
     defaults: {
         fetchInterval: 5 * 60 * 1000,
         datelocales: 'de-AT',
@@ -38,13 +38,18 @@ Module.register("MMM-LetheEmotions", {
     },
     getDom() {
         const wrapper = document.createElement("div");
+        const currentDate = new Date();
+        const currentWeekNumber = this.getWeekNumber(currentDate);
+        const totalWeeksInYear = this.getTotalWeeksInYear(currentDate);
+
         if (this.letheEmotions.length === 0) {
             wrapper.innerHTML = "Loading...";
             return wrapper;
         } else {
             wrapper.className = "bright";
-            // Create a table to display emotions in a weekly calendar
+            // Display the week info and a table of emotions
             wrapper.innerHTML = `
+                <div><strong>Kalenderwoche: KW ${currentWeekNumber}/${totalWeeksInYear}</strong></div>
                 <strong>Weekly Emotions:</strong>
                 <table>
                     <thead>
@@ -165,6 +170,15 @@ Module.register("MMM-LetheEmotions", {
             day.setDate(firstDayOfWeek.getDate() + i);
             return day.toISOString().split('T')[0]; // YYYY-MM-DD
         });
+    },
+    getWeekNumber(date) {
+        const firstDayOfYear = new Date(date.getFullYear(), 0, 1);
+        const pastDaysOfYear = (date - firstDayOfYear + (firstDayOfYear.getTimezoneOffset() - date.getTimezoneOffset()) * 60 * 1000) / 86400000;
+        return Math.ceil((pastDaysOfYear + firstDayOfYear.getDay() + 1) / 7);
+    },
+    getTotalWeeksInYear(date) {
+        const lastDayOfYear = new Date(date.getFullYear(), 11, 31);
+        return this.getWeekNumber(lastDayOfYear);
     },
     getWeekDays() {
         return ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
