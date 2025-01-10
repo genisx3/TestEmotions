@@ -1,4 +1,4 @@
-Module.register("MMM-LetheEmotions", {  
+Module.register("MMM-LetheEmotions", {   
     defaults: {
         fetchInterval: 5 * 60 * 1000,
         datelocales: 'de-AT',
@@ -16,8 +16,10 @@ Module.register("MMM-LetheEmotions", {
     },
     letheEmotions: [], // Updated to store multiple emotions with date
     currentWeekOffset: 0, // Track the current week offset
+    currentWeekNumber: 0, // To display the current week number
     notificationReceived(notification, payload, sender) {
         if (notification === 'MODULE_DOM_CREATED') {
+            this.updateWeekNumber();
             this.retrieveEmotionData();
             setInterval(() => {
                 this.retrieveEmotionData();
@@ -27,20 +29,21 @@ Module.register("MMM-LetheEmotions", {
         // Handle gestures from MMM-GroveGesture
         if (notification === "UP") {
             this.currentWeekOffset += 1;
+            this.updateWeekNumber();
             this.retrieveEmotionData();
         } else if (notification === "DOWN") {
             this.currentWeekOffset -= 1;
+            this.updateWeekNumber();
             this.retrieveEmotionData();
         } else if (notification === "CLOCKWISE") {  // Reset to current week
             this.currentWeekOffset = 0;
+            this.updateWeekNumber();
             this.retrieveEmotionData();
         }
     },
     getDom() {
         const wrapper = document.createElement("div");
-        const currentDate = new Date();
-        const currentWeekNumber = this.getWeekNumber(currentDate);
-        const totalWeeksInYear = this.getTotalWeeksInYear(currentDate);
+        const totalWeeksInYear = this.getTotalWeeksInYear(new Date());
 
         if (this.letheEmotions.length === 0) {
             wrapper.innerHTML = "Loading...";
@@ -49,7 +52,7 @@ Module.register("MMM-LetheEmotions", {
             wrapper.className = "bright";
             // Display the week info and a table of emotions
             wrapper.innerHTML = `
-                <div><strong>Kalenderwoche: KW ${currentWeekNumber}/${totalWeeksInYear}</strong></div>
+                <div><strong>Kalenderwoche: KW ${this.currentWeekNumber}/${totalWeeksInYear}</strong></div>
                 <strong>Weekly Emotions:</strong>
                 <table>
                     <thead>
@@ -160,6 +163,11 @@ Module.register("MMM-LetheEmotions", {
         });
         clearTimeout(id);
         return response;
+    },
+    updateWeekNumber() {
+        const today = new Date();
+        today.setDate(today.getDate() + (this.currentWeekOffset * 7));
+        this.currentWeekNumber = this.getWeekNumber(today);
     },
     getWeekDates(offset) {
         const today = new Date();
