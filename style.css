@@ -1,26 +1,16 @@
-/* Reduziert den Abstand und die Höhe der Kopfzeile (Wochentage) */
+/* Reduziert die Höhe der Wochentage-Zeile */
 thead th {
-    font-size: 14px; /* Kleinere Schriftgröße für Wochentage */
-    padding: 6px; /* Weniger Padding für Wochentage */
-    line-height: 1.2; /* Kompakte Zeilenhöhe für Wochentage */
+    font-size: 14px; /* Kleinere Schriftgröße */
+    padding: 4px; /* Weniger Abstand innerhalb der Zelle */
+    line-height: 1.2; /* Kompaktere Zeilenhöhe */
 }
 
-/* Beibehält die Höhe der Emotionszeile */
+/* Beibehaltung der Höhe der Emotions-Zeile */
 tbody td {
-    padding: 12px; /* Standard Padding für Emotionen */
-    vertical-align: middle; /* Vertikal ausgerichtet für bessere Darstellung */
+    padding: 10px; /* Standard-Padding für Emotionen */
 }
 
-/* Verringert den Abstand zwischen den Zeilen */
+/* Verringert den Abstand zwischen Wochentagen und Emotionen */
 table {
-    border-spacing: 0 3px; /* Verringert den Abstand zwischen Zeilen */
-}
-
-/* Optional: Klassen zur spezifischen Anpassung von Zeilen/Spalten */
-.week-day {
-    text-align: center; /* Zentriert die Wochentage */
-}
-
-.emotion-row {
-    height: 80px; /* Stellt sicher, dass die Zeile gleich hoch bleibt */
+    border-spacing: 0 5px; /* Abstand zwischen Zeilen */
 }
