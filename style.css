@@ -1,0 +1,16 @@
+/* Define styles for table cells */
+.table-cell {
+  height: 100px;
+  width: 100px;
+  overflow: hidden;
+  border: none;
+  padding-right: 5px;
+  text-align: center; /* Optional: Center-align content */
+  vertical-align: middle; /* Optional: Vertically center content */
+}
+
+/* Additional optional styles for the "no entry" text */
+.no-entry {
+  font-style: italic;
+  color: gray;
+}
