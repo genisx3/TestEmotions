@@ -1,16 +1,29 @@
-/* Reduziert die Höhe der Wochentage-Zeile */
-thead th {
-    font-size: 14px; /* Kleinere Schriftgröße */
-    padding: 4px; /* Weniger Abstand innerhalb der Zelle */
-    line-height: 1.2; /* Kompaktere Zeilenhöhe */
-}
-
-/* Beibehaltung der Höhe der Emotions-Zeile */
-tbody td {
-    padding: 10px; /* Standard-Padding für Emotionen */
-}
-
-/* Verringert den Abstand zwischen Wochentagen und Emotionen */
+/* Adjust table styling */
 table {
-    border-spacing: 0 5px; /* Abstand zwischen Zeilen */
+  border-collapse: collapse;
+  width: 100%;
 }
+
+/* Define styles for table headers and cells */
+th, td {
+  padding: 5px; /* Reduce padding */
+  margin: 0; /* Remove unnecessary margins */
+  text-align: center;
+  vertical-align: middle; /* Ensure text and images are aligned centrally */
+}
+
+/* Style for table rows and images */
+.table-cell {
+  height: 100px;
+  width: 100px;
+  display: flex;
+  justify-content: center; /* Center content horizontally */
+  align-items: center; /* Center content vertically */
+}
+
+/* Adjust style for "no entry" message */
+.no-entry {
+  font-style: italic;
+  color: gray;
+}
+ 
