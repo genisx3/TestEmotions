@@ -29,7 +29,7 @@ Module.register("MMM-LetheEmotions", {
             this.file('LetheCalendarEntryEmotions.js')
         ];
     },
-    letheEmotions: [], // Updated to store multiple emotions
+    letheEmotions: [], // Updated to store multiple emotions with date
     notificationReceived(notification, payload, sender) {
         if (notification === 'MODULE_DOM_CREATED') {
             this.retrieveEmotionData();
@@ -45,12 +45,25 @@ Module.register("MMM-LetheEmotions", {
             return wrapper;
         } else {
             wrapper.className = "bright";
-            // Display all emotions as a list
+            // Create a table to display emotions with dates
             wrapper.innerHTML = `
-                <strong>All Emotions for Patient ${this.config.patid}:</strong>
-                <ul>
-                    ${this.letheEmotions.map(emotion => `<li>${emotion}</li>`).join('')}
-                </ul>
+                <strong>Emotions for Patient ${this.config.patid}:</strong>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Emotion ID</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${this.letheEmotions.map(e => `
+                            <tr>
+                                <td>${e.date}</td>
+                                <td>${e.emotion}</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
             `;
             return wrapper;
         }
@@ -85,14 +98,17 @@ Module.register("MMM-LetheEmotions", {
 
             if (result.data && result.data.getpatientemotionsList) {
                 const emotions = result.data.getpatientemotionsList;
-                // Map over emotions to extract emmoodid
-                this.letheEmotions = emotions.map(e => e.emmoodid || "Unknown Mood ID");
+                // Store both date and emotion ID
+                this.letheEmotions = emotions.map(e => ({
+                    date: e.emdate || "Unknown Date",
+                    emotion: e.emmoodid || "Unknown Mood ID"
+                }));
             } else {
-                this.letheEmotions = ["Error: No data received."];
+                this.letheEmotions = [{ date: "Error", emotion: "No data received" }];
             }
         } catch (error) {
             console.error("Error fetching emotion data:", error);
-            this.letheEmotions = ["Error: Unable to retrieve data."];
+            this.letheEmotions = [{ date: "Error", emotion: "Unable to retrieve data" }];
         }
         this.updateDom();
     },
@@ -108,3 +124,4 @@ Module.register("MMM-LetheEmotions", {
         return response;
     },
 });
+
