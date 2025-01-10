@@ -45,21 +45,23 @@ Module.register("MMM-LetheEmotions", {
             return wrapper;
         } else {
             wrapper.className = "bright";
-            // Create a table to display emotions with dates
+            // Create a table to display emotions with dates and images
             wrapper.innerHTML = `
                 <strong>Emotions for Patient ${this.config.patid}:</strong>
                 <table>
                     <thead>
                         <tr>
                             <th>Date</th>
-                            <th>Emotion ID</th>
+                            <th>Emotion</th>
                         </tr>
                     </thead>
                     <tbody>
                         ${this.letheEmotions.map(e => `
                             <tr>
                                 <td>${e.date}</td>
-                                <td>${e.emotion}</td>
+                                <td>
+                                    <img src="${this.file(`svg/${e.emotion}.svg`)}" alt="${e.emotion}" style="width:50px;height:50px;">
+                                </td>
                             </tr>
                         `).join('')}
                     </tbody>
@@ -73,12 +75,23 @@ Module.register("MMM-LetheEmotions", {
         const query = `
             query getpatientemotions($patid: Int!) {
                 getpatientemotionsList(patid: $patid) {
-                    empatid
-                    emmoodid
                     emdate
+                    emmoodid
                 }
             }
         `;
+
+        const emotionMap = {
+            "1": "sad",
+            "2": "excited",
+            "3": "ashamed",
+            "4": "happy",
+            "5": "calm",
+            "6": "active",
+            "7": "proud",
+            "8": "afraid",
+            "9": "lonely"
+        };
 
         const variables = {
             patid: patid
@@ -98,17 +111,17 @@ Module.register("MMM-LetheEmotions", {
 
             if (result.data && result.data.getpatientemotionsList) {
                 const emotions = result.data.getpatientemotionsList;
-                // Store both date and emotion ID
+                // Map emotions to include date and emotion name
                 this.letheEmotions = emotions.map(e => ({
                     date: e.emdate || "Unknown Date",
-                    emotion: e.emmoodid || "Unknown Mood ID"
+                    emotion: emotionMap[e.emmoodid] || "unknown"
                 }));
             } else {
-                this.letheEmotions = [{ date: "Error", emotion: "No data received" }];
+                this.letheEmotions = [{ date: "Error", emotion: "no-data" }];
             }
         } catch (error) {
             console.error("Error fetching emotion data:", error);
-            this.letheEmotions = [{ date: "Error", emotion: "Unable to retrieve data" }];
+            this.letheEmotions = [{ date: "Error", emotion: "error" }];
         }
         this.updateDom();
     },
