@@ -42,7 +42,7 @@ Module.register("MMM-LetheEmotions", {
             wrapper.className = "bright";
             // Create a table to display emotions in a weekly calendar
             wrapper.innerHTML = `
-                <strong>Weekly Emotions for Patient ${this.config.patid}:</strong>
+                <strong>Weekly Emotions:</strong>
                 <table>
                     <thead>
                         <tr>
