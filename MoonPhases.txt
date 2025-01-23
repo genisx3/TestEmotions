@@ -1,0 +1,27 @@
+let config = {
+	modules: [
+		{
+			module: "MMM-MoonPhase",
+			position: "top_center",
+			config: {
+				updateInterval: 43200000,
+				hemisphere: "N",
+				resolution: "detailed",
+				basicColor: "white",
+				title: true,
+				phase: true,
+				nextFull: false,
+				size: 200,
+				moonAlign: "center",
+				textAlign: "center",
+				alpha: 0.7,
+				riseAndSet: {
+					display: false,
+					lon: -80.0,
+					lat: 40.0,
+					gmtOffset: -3.0
+				}
+			}
+		},
+	]
+}
