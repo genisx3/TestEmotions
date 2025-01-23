@@ -1,0 +1,11 @@
+{
+	"AIA 193": "https://sdo.gsfc.nasa.gov/assets/img/latest/latest_1024_0193.jpg",
+	"AIA 304": "https://sdo.gsfc.nasa.gov/assets/img/latest/latest_1024_0304.jpg",
+	"AIA 171": "https://sdo.gsfc.nasa.gov/assets/img/latest/latest_1024_0171.jpg",
+	"AIA 211": "https://sdo.gsfc.nasa.gov/assets/img/latest/latest_1024_0211.jpg",
+	"AIA 131": "https://sdo.gsfc.nasa.gov/assets/img/latest/latest_1024_0131.jpg",
+	"AIA 335": "https://sdo.gsfc.nasa.gov/assets/img/latest/latest_1024_0335.jpg",
+	"AIA 094": "https://sdo.gsfc.nasa.gov/assets/img/latest/latest_1024_0094.jpg",
+	"AIA 1600": "https://sdo.gsfc.nasa.gov/assets/img/latest/latest_1024_1600.jpg",
+	"AIA 1700": "https://sdo.gsfc.nasa.gov/assets/img/latest/latest_1024_1700.jpg"
+}
